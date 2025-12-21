@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import dotenv from "dotenv";
 import { Application } from "express";
-import apiRoutes from "./routes/apiRoutes.js"
+import apiRoutes from "./routes/imagesRoutes.js"
 import errorHandling from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -16,11 +16,11 @@ app.use(express.json());
 app.use(cors());
 
 //Routes
-// app.use("/api", apiRoutes);
+app.use("/api", apiRoutes);
 
 //Error handling middleware
 app.use(errorHandling)
 //Server running
 app.listen(port, () => {
-  console.log(`Server is running at http://localhsot:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });

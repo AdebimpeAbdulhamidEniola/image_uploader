@@ -1,8 +1,16 @@
 import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
 //configure storage
-const storage = multer.memoryStorage(); //keeps file in RAM
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'image_uploader',
+    } as any
+})  
+
 
 //setup filter
 const fileFilter = (

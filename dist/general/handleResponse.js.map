@@ -1,0 +1,1 @@
+{"version":3,"file":"handleResponse.js","sourceRoot":"","sources":["../../src/general/handleResponse.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,MAAM,cAAc,GAAG,CAAI,GAAY,EAAE,MAAa,EAAE,OAAc,EAAE,OAAgB,IAAI,EAAE,EAAE;IACnG,GAAG,CAAC,MAAM,CAAC,MAAM,CAAC,CAAC,IAAI,CAAC;QACpB,MAAM;QACN,OAAO;QACP,IAAI;KACP,CAAC,CAAA;AACN,CAAC,CAAA"}
