@@ -1,5 +1,5 @@
 import { Request,Response,NextFunction} from "express";
-import { createImageService } from "../model/ImageModel.js";
+import { createImageService, getImageByFilenameService } from "../model/ImageModel.js";
 import { handleResponse } from "../general/handleResponse.js";
 
 
@@ -16,5 +16,21 @@ export const createImage  = async(req:Request, res:Response, next:NextFunction) 
       next(err);
     }
     console.log(`Unknown error`, err)
+  }
+}
+
+export const getImageByFilename = async(req:Request<{filename:string}>, res:Response, next:NextFunction) => {
+  const {filename} = req.params 
+  try {
+    const image = await getImageByFilenameService(filename)
+    return image.filename
+  }
+  catch (err) {
+    if (err instanceof Error) {
+      next(err)
+    }
+    else {
+      console.log("Error unidentified", err)
+    }
   }
 }

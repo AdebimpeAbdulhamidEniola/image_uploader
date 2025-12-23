@@ -15,7 +15,7 @@ datasource db {
 model Image {
   id  Int @id @default(autoincrement())
   imageURL String
-  filename String
+  filename String @unique
   type     String
   createdat DateTime @default(now())
 }

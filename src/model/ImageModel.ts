@@ -1,4 +1,4 @@
-import prisma from "../prisma.js";
+import prisma from "../lib/prisma.js";
 
 export const createImageService = async (
   url: string,
@@ -13,4 +13,9 @@ export const createImageService = async (
     },
   });
   return result;
+};
+
+export const getImageByFilenameService = async (fileName: string) => {
+  const result = await prisma.image.findUnique({where: {filename: fileName}})
+  return result
 };
