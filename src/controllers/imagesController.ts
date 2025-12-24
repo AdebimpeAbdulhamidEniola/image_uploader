@@ -1,36 +1,49 @@
-import { Request,Response,NextFunction} from "express";
-import { createImageService, getImageByFilenameService } from "../model/ImageModel.js";
+import { Request, Response, NextFunction } from "express";
+import {
+  createImageService,
+  getImageByPublicIdService,
+} from "../model/ImageModel.js";
 import { handleResponse } from "../general/handleResponse.js";
 
-
-
-export const createImage  = async(req:Request, res:Response, next:NextFunction) => {
-  const {originalname, path, mimetype} =req.file
+export const createImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { originalname, path, mimetype, filename } = req.file as any;
   try {
-    const newImage = await createImageService(path,originalname, mimetype)
-    handleResponse(res, 201, "Image saved successfully", newImage)
-  
-  }
-  catch(err ) {
+    const newImage = await createImageService(
+      path,
+      originalname,
+      mimetype,
+      filename
+    );
+    handleResponse(res, 201, "Image saved successfully", newImage);
+  } catch (err) {
     if (err instanceof Error) {
       next(err);
     }
-    console.log(`Unknown error`, err)
+    console.log(`Unknown error`, err);
   }
-}
+};
 
-export const getImageByFilename = async(req:Request<{filename:string}>, res:Response, next:NextFunction) => {
-  const {filename} = req.params 
+export const getImageByPublicId = async (
+  req: Request<{ publicId: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { publicId } = req.params;
+
+
   try {
-    const image = await getImageByFilenameService(filename)
-    return image.filename
-  }
-  catch (err) {
-    if (err instanceof Error) {
-      next(err)
+    const image = await getImageByPublicIdService(publicId);
+
+    if (!image) {
+      return handleResponse(res, 404, "Image not found");
     }
-    else {
-      console.log("Error unidentified", err)
-    }
+
+    return handleResponse(res, 200, "Image found", image);
+  } catch (err) {
+    next(err);
   }
-}
+};

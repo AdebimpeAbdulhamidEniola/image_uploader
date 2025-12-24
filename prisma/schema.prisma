@@ -16,6 +16,7 @@ model Image {
   id  Int @id @default(autoincrement())
   imageURL String
   filename String @unique
+  publicId String @unique
   type     String
   createdat DateTime @default(now())
 }

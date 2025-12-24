@@ -6,6 +6,8 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'image_uploader',
+        use_filename: true,
+        unique_filename: true,
     }
 });
 //setup filter

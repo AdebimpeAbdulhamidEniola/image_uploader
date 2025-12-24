@@ -1,16 +1,17 @@
 import prisma from "../lib/prisma.js";
-export const createImageService = async (url, filename, fileType) => {
+export const createImageService = async (url, filename, fileType, publicId) => {
     const result = await prisma.image.create({
         data: {
             imageURL: url,
             filename: filename,
+            publicId: publicId,
             type: fileType,
         },
     });
     return result;
 };
-export const getImageByFilenameService = async (fileName) => {
-    const result = await prisma.image.findUnique({ where: { filename: fileName } });
+export const getImageByPublicIdService = async (publicId) => {
+    const result = await prisma.image.findUnique({ where: { publicId: publicId } });
     return result;
 };
 //# sourceMappingURL=ImageModel.js.map
