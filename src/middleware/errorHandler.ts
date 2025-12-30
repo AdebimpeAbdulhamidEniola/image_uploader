@@ -8,7 +8,7 @@ const errorHandling = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(err.stack);
+  console.log(`Error is`, err.stack);
   res.status(500).json({
     status: 500,
     message: "Oops! Something went wrong",
