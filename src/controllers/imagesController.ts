@@ -10,6 +10,7 @@ export const createImage = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(req.file);
   const { originalname, path, mimetype, filename } = req.file;
   try {
     const newImage = await createImageService(
