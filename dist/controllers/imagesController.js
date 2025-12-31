@@ -1,6 +1,7 @@
 import { createImageService, getImageByPublicIdService, } from "../model/ImageModel.js";
 import { handleResponse } from "../general/handleResponse.js";
 export const createImage = async (req, res, next) => {
+    console.log("File is", req.file);
     const { originalname, path, mimetype, filename } = req.file;
     try {
         const newImage = await createImageService(path, originalname, mimetype, filename);
