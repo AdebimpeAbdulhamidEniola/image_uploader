@@ -34,10 +34,12 @@ export const getImageByPublicId = async (
   next: NextFunction
 ) => {
   const { publicId } = req.params;
+  //decode the URI from client
+  const decoded = decodeURIComponent(publicId)
 
 
   try {
-    const image = await getImageByPublicIdService(publicId);
+    const image = await getImageByPublicIdService(decoded);
 
     if (!image) {
       return handleResponse(res, 404, "Image not found");
