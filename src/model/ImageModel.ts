@@ -18,8 +18,8 @@ export const createImageService = async (
 };
 
 export const getImageByPublicIdService = async (decoded: string) => {
-  const result = await prisma.image.findUnique({where: {publicId: decoded
-    
-  }})
-  return result
+  const result = await prisma.image.findUnique({
+    where: { publicId: decoded },
+  });
+  return result;
 };
