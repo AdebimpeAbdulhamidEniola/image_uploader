@@ -1,8 +1,16 @@
-export const handleResponse = (res, status, message, data = null) => {
-    res.status(status).json({
-        status,
-        message,
-        data
-    });
+export const handleResponse = (res, statusCode, message, data) => {
+    if (data) {
+        res.status(statusCode).json({
+            status: "success",
+            message,
+            data
+        });
+    }
+    else {
+        res.status(statusCode).json({
+            status: "success",
+            message
+        });
+    }
 };
 //# sourceMappingURL=handleResponse.js.map

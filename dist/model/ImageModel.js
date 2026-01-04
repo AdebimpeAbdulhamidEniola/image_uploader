@@ -10,8 +10,10 @@ export const createImageService = async (url, filename, fileType, publicId) => {
     });
     return result;
 };
-export const getImageByPublicIdService = async (publicId) => {
-    const result = await prisma.image.findUnique({ where: { publicId: publicId } });
+export const getImageByPublicIdService = async (decoded) => {
+    const result = await prisma.image.findUnique({
+        where: { publicId: decoded },
+    });
     return result;
 };
 //# sourceMappingURL=ImageModel.js.map

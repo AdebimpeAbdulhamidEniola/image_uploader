@@ -18,8 +18,8 @@ app.use(cors());
 //Routes
 app.use("/api", apiRoutes);
 
-//Error handling middleware
-app.use(errorHandling)
+
+
 //Server running
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
