@@ -3,7 +3,10 @@ import { createImage, getImageByPublicId } from "../controllers/imagesController
 import upload from "../middleware/upload.js";
 
 
-const router = express.Router();
+const router = express.Router({ 
+  caseSensitive: true, 
+  strict: false 
+});
 
 router.post("/upload", upload.single('image'), createImage);
 

@@ -1,6 +1,8 @@
+// src/utils/errorHandler.ts
 import { Response } from "express";
 import { Prisma } from "@prisma/client";
 import multer from "multer";
+import { AppError } from "./customError.js";
 
 export const sendErrorResponse = (
   res: Response,
@@ -14,8 +16,8 @@ export const sendErrorResponse = (
 };
 
 
+
 export const handleMulterError = (error: unknown, res: Response): boolean => {
-  // Handle Multer-specific errors
   if (error instanceof multer.MulterError) {
     if (error.code === "LIMIT_FILE_SIZE") {
       sendErrorResponse(res, 400, "File size is too large. Maximum size is 5MB");
@@ -36,7 +38,6 @@ export const handleMulterError = (error: unknown, res: Response): boolean => {
     return true;
   }
 
-  // Handle custom file filter errors
   if (error instanceof Error && error.message === "Only images are allowed") {
     sendErrorResponse(res, 400, error.message);
     return true;
@@ -50,25 +51,19 @@ export const handleMulterError = (error: unknown, res: Response): boolean => {
   return false;
 };
 
-// ============================================
-// 4. PRISMA DATABASE ERROR HANDLER
-// ============================================
 export const catchPrismaError = (error: unknown, res: Response): boolean => {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    // Unique constraint violation
     if (error.code === "P2002") {
       const field = (error.meta?.target as string[])?.[0] || "field";
       sendErrorResponse(res, 409, `A record with this ${field} already exists`);
       return true;
     }
 
-    // Record not found
     if (error.code === "P2025") {
       sendErrorResponse(res, 404, "Record not found");
       return true;
     }
 
-    // Generic database error
     sendErrorResponse(res, 400, `Database error: ${error.message}`);
     return true;
   }
@@ -76,9 +71,6 @@ export const catchPrismaError = (error: unknown, res: Response): boolean => {
   return false;
 };
 
-// ============================================
-// 5. UNEXPECTED ERROR HANDLER (FALLBACK)
-// ============================================
 export const handleUnexpectedError = (error: unknown, res: Response): void => {
   console.error("Unexpected error:", error);
 
@@ -88,11 +80,22 @@ export const handleUnexpectedError = (error: unknown, res: Response): void => {
   });
 };
 
-// ============================================
-// 6. MASTER ERROR HANDLER (CALLS ALL ABOVE)
-// ============================================
-export const handleAllErrors = (error: unknown, res: Response): void => {
+// Handle custom AppError instances
+export const handleAppError = (error: unknown, res: Response): boolean => {
+  if (error instanceof AppError) {
+    sendErrorResponse(res, error.statusCode, error.message);
+    return true;
+  }
   
+  return false;
+};
+
+export const handleAllErrors = (error: unknown, res: Response): void => {
+  // Try custom AppError first
+  if (handleAppError(error, res)) return;
+
+  
+
   // Try Multer errors
   if (handleMulterError(error, res)) return;
 

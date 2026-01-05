@@ -1,11 +1,11 @@
+// src/controllers/imagesController.ts
 import { Request, Response, NextFunction } from "express";
 import {
   createImageService,
   getImageByPublicIdService,
 } from "../model/ImageModel.js";
 import { handleResponse } from "../general/handleResponse.js";
-import { catchPrismaError, handleUnexpectedError } from "../utils/errorHandler.js";
-import { Prisma } from "@prisma/client";
+import { NoFileUploadedError, ImageNotFoundError } from "../utils/customError.js";
 
 export const createImage = async (
   req: Request,
@@ -14,10 +14,11 @@ export const createImage = async (
 ) => {
   try {
     if (!req.file) {
-      return handleResponse(res, 400, "No file uploaded");
+      throw new NoFileUploadedError();
     }
 
     const { originalname, path, mimetype, filename } = req.file;
+    
     const newImage = await createImageService(
       path,
       originalname,
@@ -26,8 +27,7 @@ export const createImage = async (
     );
     handleResponse(res, 201, "Image saved successfully", newImage);
   } catch (error) {
-    if (catchPrismaError(error as Prisma.PrismaClientKnownRequestError, res)) return;
-    handleUnexpectedError(error as Error, res);
+    next(error);
   }
 };
 
@@ -42,12 +42,11 @@ export const getImageByPublicId = async (
     const image = await getImageByPublicIdService(decoded);
 
     if (!image) {
-      return handleResponse(res, 404, "Image not found");
+      throw new ImageNotFoundError();
     }
 
     return handleResponse(res, 200, "Image found", image);
   } catch (error) {
-    if (catchPrismaError(error as Prisma.PrismaClientKnownRequestError, res)) return;
-    handleUnexpectedError(error as Error, res);
+    next(error);
   }
 };

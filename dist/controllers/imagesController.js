@@ -1,19 +1,17 @@
 import { createImageService, getImageByPublicIdService, } from "../model/ImageModel.js";
 import { handleResponse } from "../general/handleResponse.js";
-import { catchPrismaError, handleUnexpectedError } from "../utils/errorHandler.js";
+import { NoFileUploadedError, ImageNotFoundError } from "../utils/customError.js";
 export const createImage = async (req, res, next) => {
     try {
         if (!req.file) {
-            return handleResponse(res, 400, "No file uploaded");
+            throw new NoFileUploadedError();
         }
         const { originalname, path, mimetype, filename } = req.file;
         const newImage = await createImageService(path, originalname, mimetype, filename);
         handleResponse(res, 201, "Image saved successfully", newImage);
     }
     catch (error) {
-        if (catchPrismaError(error, res))
-            return;
-        handleUnexpectedError(error, res);
+        next(error);
     }
 };
 export const getImageByPublicId = async (req, res, next) => {
@@ -22,14 +20,12 @@ export const getImageByPublicId = async (req, res, next) => {
         const decoded = decodeURIComponent(publicId);
         const image = await getImageByPublicIdService(decoded);
         if (!image) {
-            return handleResponse(res, 404, "Image not found");
+            throw new ImageNotFoundError();
         }
         return handleResponse(res, 200, "Image found", image);
     }
     catch (error) {
-        if (catchPrismaError(error, res))
-            return;
-        handleUnexpectedError(error, res);
+        next(error);
     }
 };
 //# sourceMappingURL=imagesController.js.map
