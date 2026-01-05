@@ -2,7 +2,7 @@
 import { Response } from "express";
 import { Prisma } from "@prisma/client";
 import multer from "multer";
-import { AppError } from "./customError.js";
+import { AppError } from "./customError";
 
 export const sendErrorResponse = (
   res: Response,

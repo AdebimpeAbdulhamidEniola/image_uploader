@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from "express";
 import {
   createImageService,
   getImageByPublicIdService,
-} from "../model/ImageModel.js";
-import { handleResponse } from "../general/handleResponse.js";
-import { NoFileUploadedError, ImageNotFoundError } from "../utils/customError.js";
+} from "../model/ImageModel";
+import { handleResponse } from "../general/handleResponse"
+import { NoFileUploadedError, ImageNotFoundError } from "../utils/customError";
 
 export const createImage = async (
   req: Request,

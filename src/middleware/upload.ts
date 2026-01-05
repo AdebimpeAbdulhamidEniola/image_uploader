@@ -2,7 +2,7 @@
 import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import cloudinary from "../config/cloudinary.js";
+import cloudinary from "../config/cloudinary";
 
 //configure storage
 const storage = new CloudinaryStorage({
