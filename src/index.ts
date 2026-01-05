@@ -5,6 +5,7 @@ import { Application } from "express";
 import apiRoutes from "./routes/imagesRoutes.js"
 import errorHandling from "./middleware/errorHandler.js";
 
+
 dotenv.config();
 
 const app: Application = express();
@@ -18,8 +19,8 @@ app.use(cors());
 //Routes
 app.use("/api", apiRoutes);
 
-
-
+//Error Handling Middleware
+app.use(errorHandling);
 //Server running
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

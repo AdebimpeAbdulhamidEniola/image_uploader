@@ -5,17 +5,25 @@ import cloudinary from "../config/cloudinary.js";
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'image_uploader',
+        folder: "image_uploader",
         use_filename: true,
         unique_filename: true,
-    }
+        allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
+    },
 });
 //setup filter
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith("image/"))
+    // Check if field name is "image"
+    if (file.fieldname !== "image") {
+        return cb(new Error("Only 'image' field is allowed"));
+    }
+    // Check if file is an image
+    if (file.mimetype.startsWith("image/")) {
         cb(null, true);
-    else
+    }
+    else {
         cb(new Error("Only images are allowed"));
+    }
 };
 const upload = multer({
     storage: storage,

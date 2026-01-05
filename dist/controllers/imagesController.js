@@ -1,10 +1,10 @@
 import { createImageService, getImageByPublicIdService, } from "../model/ImageModel.js";
 import { handleResponse } from "../general/handleResponse.js";
-import { catchPrismaError, handleUnexpectedError, sendErrorResponse } from "../utils/errorHandler.js";
+import { catchPrismaError, handleUnexpectedError } from "../utils/errorHandler.js";
 export const createImage = async (req, res, next) => {
     try {
         if (!req.file) {
-            return sendErrorResponse(res, 400, "No file uploaded");
+            return handleResponse(res, 400, "No file uploaded");
         }
         const { originalname, path, mimetype, filename } = req.file;
         const newImage = await createImageService(path, originalname, mimetype, filename);
@@ -22,7 +22,7 @@ export const getImageByPublicId = async (req, res, next) => {
         const decoded = decodeURIComponent(publicId);
         const image = await getImageByPublicIdService(decoded);
         if (!image) {
-            return sendErrorResponse(res, 404, "Image not found");
+            return handleResponse(res, 404, "Image not found");
         }
         return handleResponse(res, 200, "Image found", image);
     }

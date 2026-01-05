@@ -4,7 +4,7 @@ import {
   getImageByPublicIdService,
 } from "../model/ImageModel.js";
 import { handleResponse } from "../general/handleResponse.js";
-import { catchPrismaError, handleUnexpectedError, sendErrorResponse } from "../utils/errorHandler.js";
+import { catchPrismaError, handleUnexpectedError } from "../utils/errorHandler.js";
 import { Prisma } from "@prisma/client";
 
 export const createImage = async (
@@ -14,7 +14,7 @@ export const createImage = async (
 ) => {
   try {
     if (!req.file) {
-      return sendErrorResponse(res, 400, "No file uploaded");
+      return handleResponse(res, 400, "No file uploaded");
     }
 
     const { originalname, path, mimetype, filename } = req.file;
@@ -42,7 +42,7 @@ export const getImageByPublicId = async (
     const image = await getImageByPublicIdService(decoded);
 
     if (!image) {
-      return sendErrorResponse(res, 404, "Image not found");
+      return handleResponse(res, 404, "Image not found");
     }
 
     return handleResponse(res, 200, "Image found", image);

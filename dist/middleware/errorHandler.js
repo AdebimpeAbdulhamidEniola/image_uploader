@@ -1,16 +1,11 @@
-import { AppError } from "../utils/errorHandler.js";
+import { handleAllErrors } from "../utils/errorHandler.js";
 const errorHandling = (err, req, res, next) => {
-    if (err instanceof AppError) {
-        return res.status(err.statusCode).json({
-            status: "fail",
-            message: err.message,
-        });
+    // If response already sent, delegate to Express default handler
+    if (res.headersSent) {
+        return next(err);
     }
-    console.log(`Error is`, err.stack);
-    res.status(500).json({
-        status: "error",
-        message: "Internal Server Error",
-    });
+    // Handle all types of errors using the utility function
+    handleAllErrors(err, res);
 };
 export default errorHandling;
 //# sourceMappingURL=errorHandler.js.map
