@@ -93,7 +93,7 @@ Upload a single image file to the server.
 
 **Supported Formats**: JPG, JPEG, PNG, GIF, WebP
 
-**Maximum File Size**: 5MB
+**Maximum File Size**: 2MB
 
 **Example Request**:
 ```bash
