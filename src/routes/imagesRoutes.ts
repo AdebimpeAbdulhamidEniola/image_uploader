@@ -5,7 +5,7 @@ import upload from "../middleware/upload";
 
 const router = express.Router({ 
   caseSensitive: true, 
-  strict: false 
+  strict: true 
 });
 
 router.post("/upload", upload.single('image'), createImage);
